@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
 
+# 影像梯度 Magnitude
 def image_gradient(st, img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # 滑桿：讓使用者指定 Sobel 核大小 k，範圍 1–31，步長 2（確保奇數核）
     k = st.sidebar.slider("Sobel Kernel Size", 1, 31, 3, step=2)
     dx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=k)
     dy = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=k)
@@ -10,6 +12,7 @@ def image_gradient(st, img):
     mag = np.uint8(np.clip(mag, 0, 255))
     return cv2.cvtColor(mag, cv2.COLOR_GRAY2BGR)
 
+# 霍夫直線／圓偵測
 def hough_detect(st, img):
     mode = st.sidebar.selectbox("Hough Mode", ["Lines","Circles"])
     out = img.copy()
@@ -21,6 +24,7 @@ def hough_detect(st, img):
             for l in lines:
                 x1,y1,x2,y2 = l[0]
                 cv2.line(out, (x1,y1), (x2,y2), (0,255,0), 2)
+    # 偵測圓形
     else:
         dp = st.sidebar.slider("dp", 1.0, 3.0, 1.2)
         md = st.sidebar.slider("Min Dist", 10, 100, 20)

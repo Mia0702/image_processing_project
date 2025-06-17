@@ -9,6 +9,7 @@ def analyze_objects(st, img):
     ])
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # 輪廓標籤與面積、周長、圓度等度量
     if mode == "Labeling & Measurements":
         _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -23,6 +24,7 @@ def analyze_objects(st, img):
         df = pd.DataFrame(data)
         st.dataframe(df)
         return output
+    # Harris 角點偵測
     elif mode == "Harris":
         block = st.sidebar.slider("Block Size", 2, 10, 2)
         ksize = st.sidebar.slider("KS Size", 1, 7, 3)
@@ -31,19 +33,24 @@ def analyze_objects(st, img):
         dst = cv2.dilate(dst, None)
         output[dst > 0.01 * dst.max()] = [0, 0, 255]
         return output
+     # Shi-Tomasi 好特徵偵測（Good Features To Track）
     elif mode == "Shi-Tomasi":
         maxC = st.sidebar.slider("Max Corners", 1, 100, 50)
         q = st.sidebar.slider("Quality Level", 0.01, 0.1, 0.04)
         md = st.sidebar.slider("Min Distance", 1, 50, 10)
         corners = cv2.goodFeaturesToTrack(gray, maxC, q, md)
         if corners is not None:
-            for x,y in np.int0(corners):
-                cv2.circle(output, (x,y), 5, (0,255,0), -1)
+            # corners 原形狀為 (N,1,2)，squeeze & astype(int) 後變成 (N,2)
+            pts = corners.reshape(-1, 2).astype(int)
+            for x, y in pts:
+                cv2.circle(output, (x, y), 5, (0, 255, 0), -1)
         return output
+    # ORB 演算法的關鍵點偵測
     elif mode == "ORB Keypoints":
         orb = cv2.ORB_create()
         kp = orb.detect(gray, None)
         return cv2.drawKeypoints(img, kp, None, (0,255,0), flags=0)
+    # 膚色遮罩
     elif mode == "Skin Detection":
         space = st.sidebar.selectbox("Color Space", ["HSV","YCrCb"])
         if space == "HSV":
@@ -56,6 +63,7 @@ def analyze_objects(st, img):
             upper = np.array([255,173,127], dtype="uint8")
         mask = cv2.inRange(conv, lower, upper)
         return cv2.bitwise_and(img, img, mask=mask)
+    # Haar Cascade 人臉偵測
     else:
         sf = st.sidebar.slider("Scale Factor", 1.01, 2.0, 1.1)
         mn = st.sidebar.slider("Min Neighbors", 1, 10, 5)

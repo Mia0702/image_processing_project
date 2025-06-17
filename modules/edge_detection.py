@@ -4,6 +4,7 @@ import numpy as np
 def detect_edges(st, img):
     method = st.sidebar.selectbox("Method", ["Sobel","Canny"])
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # 如果選 Sobel，就先放一個滑桿讓使用者指定卷積核大小 k，範圍 1 到 31，預設 3，且每次跳 2，確保核大小為奇數（Sobel 要用奇數核）
     if method == "Sobel":
         k = st.sidebar.slider("Kernel Size", 1, 31, 3, step=2)
         dx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=k)

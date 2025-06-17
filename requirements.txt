@@ -1,5 +1,16 @@
 streamlit
+# streamlit 一個專為資料科學和機器學習打造的快速開發框架
+# 只要寫純 Python，就能自動生成互動式網頁介面（滑桿、下拉選單、上傳元件、即時圖表等），不用前端 HTML/CSS/JavaScript
+# 透過 st.sidebar, st.columns, st.image… 等 API，快速把你寫好的函式包成一個可分享的 Web App
 opencv-python-headless
+# OpenCV（Open Source Computer Vision Library）的 Python 綁定版本，但 不含 GUI（無頭模式，適合伺服器或 CI/CD 環境）
+# 提供高效能的影像讀取、轉換、幾何變換、濾波、特徵偵測等演算法實作
+# 在雲端部署或 Docker 容器中使用時，比 opencv-python 更輕量、也避免缺少 X11/GTK 等 GUI 依賴的問題
 numpy
+# NumPy 是 Python 的一個核心科學計算庫，提供高效能的多維陣列物件和數學函式庫
 scikit-image
+# Scikit-image 是一個基於 NumPy 的影像處理庫，提供各種影像處理演算法和工具
+# 包含濾波、邊緣檢測、形態學操作、特徵提取等功能，適合用於影像分析和計算機視覺任務
 pandas
+# Pandas 是 Python 的一個資料分析庫，提供高效能的資料結構和資料分析工具
+# 特別適合處理表格型資料（DataFrame），並提供豐富的資料操作和分析功能

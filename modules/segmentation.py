@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 def segment(st, img):
+    # 全域閾值、平均法自適應閾值、高斯法自適應閾值、分水嶺（Watershed）與 GrabCut
     method = st.sidebar.selectbox("Segmentation", [
         "Global Threshold","Adaptive Mean","Adaptive Gaussian","Watershed","GrabCut"
     ])

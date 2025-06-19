@@ -4,12 +4,12 @@ import numpy as np
 from skimage.morphology import skeletonize, thin
 
 def morphology_ops(st, img):
-    op = st.sidebar.selectbox("Operation", [
-        "Erode","Dilate","Open","Close","Gradient",
-        "Top Hat","Black Hat","Skeletonize","Thinning"
+    op = st.sidebar.selectbox("形態學操作", [
+    "侵蝕","膨脹","開運算","閉運算","影像梯度",
+    "頂帽","黑帽","骨架化","細化"
     ])
-    k = st.sidebar.slider("Kernel Size", 1, 31, 3, step=2)
-    iters = st.sidebar.slider("Iterations", 1, 10, 1)
+    k = st.sidebar.slider("核大小", 1, 31, 3, step=2)
+    iters = st.sidebar.slider("迭代次數", 1, 10, 1)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (k, k))
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # 侵蝕（Erode）
@@ -41,7 +41,7 @@ def morphology_ops(st, img):
         res = (skel * 255).astype(np.uint8)
     # 細化（Thinning）
     else:
-        th = st.sidebar.slider("Threshold", 0, 255, 127)
+        th = st.sidebar.slider("二值化門檻", 0, 255, 127)
         bw = gray > th
         thin_img = thin(bw)
         res = (thin_img * 255).astype(np.uint8)

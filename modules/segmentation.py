@@ -3,17 +3,17 @@ import numpy as np
 
 def segment(st, img):
     # 全域閾值、平均法自適應閾值、高斯法自適應閾值、分水嶺（Watershed）與 GrabCut
-    method = st.sidebar.selectbox("Segmentation", [
-        "Global Threshold","Adaptive Mean","Adaptive Gaussian","Watershed","GrabCut"
+    method = st.sidebar.selectbox("分割方法", [
+    "全域閾值","自適應閾值(平均法)","自適應閾值(高斯法)","分水嶺","GrabCut"
     ])
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     if method == "Global Threshold":
-        th = st.sidebar.slider("Threshold", 0, 255, 127)
+        th = st.sidebar.slider("門檻值", 0, 255, 127)
         _, mask = cv2.threshold(gray, th, 255, cv2.THRESH_BINARY)
         return cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
     elif method == "Adaptive Mean":
-        bs = st.sidebar.slider("Block Size", 3, 51, 11, step=2)
-        C = st.sidebar.slider("C", 0, 20, 2)
+        bs = st.sidebar.slider("區塊大小", 3, 51, 11, step=2)
+        C = st.sidebar.slider("C 值", 0, 20, 2)
         mask = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                      cv2.THRESH_BINARY, bs, C)
         return cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
@@ -40,10 +40,10 @@ def segment(st, img):
         return img
     else:
         mask = np.zeros(img.shape[:2], np.uint8)
-        x = st.sidebar.slider("Rect x", 0, img.shape[1], 10)
-        y = st.sidebar.slider("Rect y", 0, img.shape[0], 10)
-        w = st.sidebar.slider("Rect w", 10, img.shape[1], img.shape[1]//2)
-        h = st.sidebar.slider("Rect h", 10, img.shape[0], img.shape[0]//2)
+        x = st.sidebar.slider("矩形 X", 0, img.shape[1], 10)
+        y = st.sidebar.slider("矩形 Y", 0, img.shape[0], 10)
+        w = st.sidebar.slider("矩形寬度", 10, img.shape[1], img.shape[1]//2)
+        h = st.sidebar.slider("矩形高度", 10, img.shape[0], img.shape[0]//2)
         rect = (x, y, w, h)
         bgd = np.zeros((1,65), dtype=np.float64)
         fgd = np.zeros((1,65), dtype=np.float64)

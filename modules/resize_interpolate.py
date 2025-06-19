@@ -10,7 +10,7 @@ def resize_image(st, img):
     # INTER_CUBIC：立方插值，比線性更平滑，但比較慢
     # INTER_LANCZOS4：Lanczos（8×8 區域）插值，品質最佳但最慢
     interp = st.sidebar.selectbox(
-        "Interpolation", ['INTER_NEAREST','INTER_LINEAR','INTER_AREA','INTER_CUBIC','INTER_LANCZOS4']
+    "插值方法", ['最近鄰','線性插值','區域插值','三次插值','Lanczos 插值']
     )
     # getattr(cv2, interp) 會動態從 cv2 模組取得該插值方法的常數值（整數）
     interp_flag = getattr(cv2, interp)

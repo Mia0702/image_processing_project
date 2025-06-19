@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 
 def analyze_objects(st, img):
-    mode = st.sidebar.selectbox("Analysis", [
-        "Labeling & Measurements","Harris","Shi-Tomasi",
-        "ORB Keypoints","Skin Detection","Face Detection"
+    mode = st.sidebar.selectbox("分析模式", [
+    "標籤與量測","Harris 角點","Shi–Tomasi 角點",
+    "ORB 關鍵點","膚色偵測","人臉偵測"
     ])
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -25,7 +25,7 @@ def analyze_objects(st, img):
         st.dataframe(df)
         return output
     # Harris 角點偵測
-    elif mode == "Harris":
+    elif mode == "Harris 角點":
         block = st.sidebar.slider("Block Size", 2, 10, 2)
         ksize = st.sidebar.slider("KS Size", 1, 7, 3)
         k = st.sidebar.slider("k", 0.01, 0.1, 0.04)
@@ -34,7 +34,7 @@ def analyze_objects(st, img):
         output[dst > 0.01 * dst.max()] = [0, 0, 255]
         return output
      # Shi-Tomasi 好特徵偵測（Good Features To Track）
-    elif mode == "Shi-Tomasi":
+    elif mode == "Shi-Tomasi 角點":
         maxC = st.sidebar.slider("Max Corners", 1, 100, 50)
         q = st.sidebar.slider("Quality Level", 0.01, 0.1, 0.04)
         md = st.sidebar.slider("Min Distance", 1, 50, 10)
@@ -46,13 +46,13 @@ def analyze_objects(st, img):
                 cv2.circle(output, (x, y), 5, (0, 255, 0), -1)
         return output
     # ORB 演算法的關鍵點偵測
-    elif mode == "ORB Keypoints":
+    elif mode == "ORB 關鍵點":
         orb = cv2.ORB_create()
         kp = orb.detect(gray, None)
         return cv2.drawKeypoints(img, kp, None, (0,255,0), flags=0)
     # 膚色遮罩
-    elif mode == "Skin Detection":
-        space = st.sidebar.selectbox("Color Space", ["HSV","YCrCb"])
+    elif mode == "膚色偵測":
+        space = st.sidebar.selectbox("顏色空間", ["HSV","YCrCb"])
         if space == "HSV":
             conv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             lower = np.array([0,48,80], dtype="uint8")
@@ -65,8 +65,8 @@ def analyze_objects(st, img):
         return cv2.bitwise_and(img, img, mask=mask)
     # Haar Cascade 人臉偵測
     else:
-        sf = st.sidebar.slider("Scale Factor", 1.01, 2.0, 1.1)
-        mn = st.sidebar.slider("Min Neighbors", 1, 10, 5)
+        sf = st.sidebar.slider("縮放因子", 1.01, 2.0, 1.1)
+        mn = st.sidebar.slider("最小鄰居數", 1, 10, 5)
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
         faces = face_cascade.detectMultiScale(gray, sf, mn)
         for x,y,w,h in faces:

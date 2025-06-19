@@ -5,7 +5,7 @@ import numpy as np
 def image_gradient(st, img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # 滑桿：讓使用者指定 Sobel 核大小 k，範圍 1–31，步長 2（確保奇數核）
-    k = st.sidebar.slider("Sobel Kernel Size", 1, 31, 3, step=2)
+    k = st.sidebar.slider("Sobel核大小", 1, 31, 3, step=2)
     dx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=k)
     dy = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=k)
     mag = cv2.magnitude(dx, dy)
@@ -14,7 +14,7 @@ def image_gradient(st, img):
 
 # 霍夫直線／圓偵測
 def hough_detect(st, img):
-    mode = st.sidebar.selectbox("Hough Mode", ["Lines","Circles"])
+    mode = st.sidebar.selectbox("霍夫偵測模式", ["直線","圓形"])
     out = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     if mode == "Lines":
@@ -26,10 +26,10 @@ def hough_detect(st, img):
                 cv2.line(out, (x1,y1), (x2,y2), (0,255,0), 2)
     # 偵測圓形
     else:
-        dp = st.sidebar.slider("dp", 1.0, 3.0, 1.2)
-        md = st.sidebar.slider("Min Dist", 10, 100, 20)
-        p1 = st.sidebar.slider("Param1", 10, 300, 100)
-        p2 = st.sidebar.slider("Param2", 10, 100, 30)
+        dp = st.sidebar.slider("dp 值", 1.0, 3.0, 1.2)
+        md = st.sidebar.slider("最小距離", 10, 100, 20)
+        p1 = st.sidebar.slider("參數1", 10, 300, 100)
+        p2 = st.sidebar.slider("參數2", 10, 100, 30)
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, md, param1=p1, param2=p2)
         if circles is not None:
             for x,y,r in np.uint16(np.around(circles[0])):
